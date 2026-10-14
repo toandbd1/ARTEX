@@ -1,0 +1,27 @@
+# Image đánh giá Benchmark Tencent TSec của ARTEX — build + run một lần ở cục bộ.
+# Không ảnh hưởng lẫn nhau với docker-compose.yml dùng cho production (nhiều service: artex+postgres).
+# Cách dùng:
+#   cp bench/.env.example bench/.env   # điền LLM_API_KEY / BENCHMARK_TOKEN...
+#   docker compose -f docker-compose.bench.yml up --build      # build và chạy foreground (xem nhật ký)
+#   docker compose -f docker-compose.bench.yml up --build -d   # chạy nền
+#   docker compose -f docker-compose.bench.yml logs -f
+#   docker compose -f docker-compose.bench.yml down            # dừng (thêm -v để xóa cả volume dữ liệu)
+# Trình duyệt: http://localhost:8787 (đăng nhập bằng ADMIN_PASSWORD)
+
+services:
+  artex-bench:
+    build:
+      context: .
+      dockerfile: Dockerfile.bench
+    image: artex-bench:latest
+    container_name: artex-bench
+    env_file:
+      - bench/.env
+    # Chia sẻ mạng với máy vật lý: container dùng trực tiếp network stack của host, có thể kết nối trực tiếp tới mạng máy mục tiêu trên host/VPN.
+    # Ở chế độ host không cần ánh xạ ports, container bind trực tiếp cổng của host: 8787(UI/API), 8788(proxy),
+    # và PostgreSQL nội bộ 5432 — hãy đảm bảo ba cổng này trên host đang trống (trước khi test cục bộ hãy dừng các dịch vụ đang chiếm chúng).
+    network_mode: host
+    restart: "no"
+
+volumes:
+  artex_bench_data:

@@ -1,0 +1,23 @@
+{
+  "_comment": "Sao chép thành config.json (hoặc dùng biến môi trường ARTEX_CONFIG để chỉ định đường dẫn khác). File này chỉ chứa hai mục database và skill_dir; các cấu hình khác như LLM đi qua biến môi trường hoặc cài đặt trong ứng dụng, không nằm trong file này.",
+
+  "_comment_database": "Kết nối PostgreSQL. Thứ tự ưu tiên: biến môi trường ARTEX_PG_DSN > database trong file này. Chọn một trong hai cách viết: (A) điền các trường riêng bên dưới; (B) chỉ điền database.dsn là một chuỗi kết nối đầy đủ.",
+  "database": {
+    "host": "127.0.0.1",
+    "port": 5433,
+    "user": "artex",
+    "password": "",
+    "dbname": "artex",
+    "sslmode": "disable"
+  },
+
+  "_comment_database_dsn": "Cách viết (B): xóa database phía trên, đổi sang dùng DSN đầy đủ. Khi dsn không trống sẽ bỏ qua các trường riêng.",
+  "_example_database_dsn": {
+    "database": {
+      "dsn": "postgres://user:pass@db.example.com:5432/artex?sslmode=require"
+    }
+  },
+
+  "_comment_skill_dir": "Thư mục gốc của skill (mỗi thư mục con là một skill, chứa SKILL.md). Thứ tự ưu tiên: biến môi trường ARTEX_SKILL_DIR > trường này > mặc định (thư mục skills/ cùng cấp với file thực thi). Để trống hoặc xóa trường này tức là dùng mặc định. Đường dẫn tương đối được phân giải theo thư mục làm việc hiện tại.",
+  "skill_dir": "/opt/artex/skills"
+}
